@@ -16,7 +16,7 @@ export const ROLE_REDIRECTS: Record<UserRole, string> = {
   workshop_manager: "/atolye-paneli",
   instructor: "/egitmen-paneli",
   coordinator: "/koordinator-paneli",
-  executive: "/yonetici-dashboard",
+  executive: "/yonetici-paneli",
   student: "/ogrenci-ana-sayfa",
 };
 

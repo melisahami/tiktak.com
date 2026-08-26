@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState, startTransition } from "react";
 
 import { signIn } from "@/lib/auth/login";
 import { readSession } from "@/lib/auth/session";
@@ -28,8 +28,7 @@ const AUDIENCE_OPTIONS: ReadonlyArray<{
     value: "student",
     title: "Öğrenci girişi",
     caption: "Öğrenci hesabı",
-    helper:
-      "Öğrenci hesabınızla derslerinize ve yoklama bilgilerinize erişin.",
+    helper: "Öğrenci hesabınızla derslerinize ve yoklama bilgilerinize erişin.",
     emailPlaceholder: "ad.soyad@ogrenci.tiktakturkiye.gov.tr",
   },
 ];
@@ -89,7 +88,7 @@ export function LoginView() {
     const session = readSession();
 
     if (session) {
-      setIsRedirecting(true);
+      startTransition(() => setIsRedirecting(true));
       router.replace(session.user.redirect);
       return;
     }
@@ -98,7 +97,7 @@ export function LoginView() {
       const remembered = window.localStorage.getItem(REMEMBERED_EMAIL_KEY);
 
       if (remembered) {
-        setEmail(remembered);
+        startTransition(() => setEmail(remembered));
       }
     } catch {
       // Depolama kullanılamıyorsa alan boş kalır.
@@ -239,7 +238,9 @@ export function LoginView() {
           </div>
 
           <div className="rounded-2xl border border-[#E4EAF2] bg-white p-7 shadow-[0_20px_45px_-30px_rgba(20,33,61,0.45)] sm:p-8">
-            <h2 className="text-2xl font-semibold tracking-tight">Giriş yapın</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Giriş yapın
+            </h2>
             <p className="mt-2 text-sm text-[#667085]">
               Erişim alanınızı seçerek devam edin.
             </p>
@@ -320,7 +321,10 @@ export function LoginView() {
                   setEmail(event.target.value);
 
                   if (fieldErrors.email) {
-                    setFieldErrors((current) => ({ ...current, email: undefined }));
+                    setFieldErrors((current) => ({
+                      ...current,
+                      email: undefined,
+                    }));
                   }
                 }}
                 placeholder={activeOption.emailPlaceholder}
@@ -410,8 +414,8 @@ export function LoginView() {
 
               {showPasswordHint ? (
                 <p className="mt-3 rounded-lg border border-[#E4EAF2] bg-[#F8FAFC] px-4 py-3 text-sm leading-6 text-[#667085]">
-                  Şifrenizi sıfırlamak için kurum operasyon sorumlunuzla iletişime
-                  geçin.
+                  Şifrenizi sıfırlamak için kurum operasyon sorumlunuzla
+                  iletişime geçin.
                 </p>
               ) : null}
 
