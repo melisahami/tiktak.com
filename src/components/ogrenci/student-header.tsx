@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { LogoutButton } from "@/components/auth/logout-button";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 interface StudentHeaderProps {
   studentName: string;
@@ -24,9 +25,7 @@ export function StudentHeader({ studentName }: StudentHeaderProps) {
     <header className="border-b border-[#E4EAF2] bg-white">
       <div className="mx-auto flex max-w-full items-center justify-between px-6 py-4 lg:px-8">
         <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#14213D] text-sm font-semibold text-white">
-            T
-          </span>
+          <BrandLogo compact />
           <h1 className="text-lg font-semibold text-[#172033]">
             TikTakTürkiye – Öğrenci Paneli
           </h1>

@@ -6,6 +6,7 @@ import { useEffect, useId, useMemo, useState, startTransition } from "react";
 import { signIn } from "@/lib/auth/login";
 import { readSession } from "@/lib/auth/session";
 import type { LoginAudience } from "@/types/auth";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 const REMEMBERED_EMAIL_KEY = "tiktakturkiye.operasyon.remembered-email";
 
@@ -181,12 +182,9 @@ export function LoginView() {
         />
 
         <div className="relative flex items-center gap-4">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#F4A261]/35 bg-[#20304F] text-lg font-semibold text-[#F4A261]">
-            T
-          </span>
-
-          <p className="text-lg font-semibold tracking-tight">
-            TikTakTürkiye Operasyon
+          <BrandLogo compact />
+          <p className="text-lg font-semibold tracking-tight text-white">
+            TikTak Türkiye
           </p>
         </div>
 
@@ -229,11 +227,9 @@ export function LoginView() {
       <section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8">
         <div className="w-full max-w-[468px]">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#14213D] text-base font-semibold text-[#F4A261]">
-              T
-            </span>
+            <BrandLogo compact />
             <p className="text-base font-semibold text-[#172033]">
-              TikTakTürkiye Operasyon
+              TikTak Türkiye
             </p>
           </div>
 

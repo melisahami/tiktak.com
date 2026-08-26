@@ -9,7 +9,7 @@ import PanelShell from "@/components/panel/PanelShell";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { SessionGuard } from "@/components/auth/session-guard";
 
-export const metadata = { title: "Merkez Operasyon Paneli" };
+export const metadata = { title: "Merkez Paneli" };
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

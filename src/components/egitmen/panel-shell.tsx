@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import type { ReactNode } from "react";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 const NAV = [
   ["Ana sayfa", "/egitmen-paneli"],
@@ -35,9 +36,7 @@ export function InstructorPanelShell({
       <aside className="hidden w-[148px] shrink-0 flex-col bg-[#0D1A38] px-2 py-3 lg:flex">
         <div className="mb-5 border-b border-white/10 px-1.5 pb-4">
           <div className="flex items-start gap-1.5 text-[9px] font-semibold leading-3 text-white">
-            <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded bg-[#F59E4A] text-[8px] text-[#14213D]">
-              T
-            </span>
+            <BrandLogo compact />
             <span>
               TikTakTürkiye
               <br />
@@ -77,7 +76,7 @@ export function InstructorPanelShell({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex min-h-[38px] flex-wrap items-center gap-3 border-b border-[#DDE5F0] bg-white px-4 py-2 lg:px-4">
           <div className="text-[9px] text-[#667085]">
-            TikTakTürkiye Operasyon / Ana sayfa
+            TikTak Türkiye / Ana sayfa
           </div>
           <nav className="flex flex-wrap gap-1 lg:hidden">
             {NAV.map(([label, href]) => (

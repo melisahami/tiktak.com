@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import { RolePageShell } from "@/components/layout/role-page-shell";
 
 export const metadata: Metadata = {
-  title: "Yönetici dashboard · TikTakTürkiye Operasyon",
-  description: "Türkiye geneli operasyon göstergelerini, kritik riskleri ve dönem hazırlık ilerlemesini üst seviyede izleyin.",
+  title: "Yönetici dashboard · TikTak Türkiye",
+  description:
+    "Türkiye geneli operasyon göstergelerini, kritik riskleri ve dönem hazırlık ilerlemesini üst seviyede izleyin.",
 };
 
 export default function ExecutiveDashboardPage() {
@@ -36,11 +37,13 @@ export default function ExecutiveDashboardPage() {
       notes={[
         {
           title: "Dönem ilerlemesi",
-          description: "Güz Dönemi 2026 hazırlık takvimini ve tamamlanma oranını izleyin.",
+          description:
+            "Güz Dönemi 2026 hazırlık takvimini ve tamamlanma oranını izleyin.",
         },
         {
           title: "Yönetim raporu",
-          description: "Bölge ve il bazlı performans özetlerini tek görünümde derleyin.",
+          description:
+            "Bölge ve il bazlı performans özetlerini tek görünümde derleyin.",
         },
       ]}
       role="executive"

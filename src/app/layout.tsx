@@ -2,9 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "TikTakTürkiye Operasyon",
+  title: "TikTak Türkiye",
   description:
     "Eğitim operasyonları için görev, hazırlık, malzeme ve yoklama yönetimi",
+  icons: {
+    icon: "/logo/tiktak-logo.png",
+    apple: "/logo/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
