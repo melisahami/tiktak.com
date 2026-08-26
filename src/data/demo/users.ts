@@ -69,7 +69,7 @@ export const DEMO_USERS: readonly DemoUser[] = [
     role: "executive",
     audience: "employee",
     organization: "Genel Yönetim",
-    redirect: "/yonetici-dashboard",
+    redirect: "/yonetici-paneli",
   },
   {
     id: "elif-yilmaz",
