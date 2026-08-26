@@ -1,3 +1,4 @@
+import { LogoutButton } from "@/components/auth/logout-button";
 import { MetricCard } from "@/components/ui/metric-card";
 import { PriorityBadge } from "@/components/ui/priority-badge";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -95,9 +96,7 @@ export default function CentralOperationsPage() {
       <div className="flex min-h-screen">
         <aside className="hidden w-64 shrink-0 bg-[#14213D] px-4 py-6 text-white lg:block">
           <div className="border-b border-white/10 px-3 pb-6">
-            <p className="text-sm font-medium text-[#F4A261]">
-              TikTakTürkiye
-            </p>
+            <p className="text-sm font-medium text-[#F4A261]">TikTakTürkiye</p>
             <h1 className="mt-1 text-lg font-semibold">Operasyon</h1>
           </div>
 
@@ -141,7 +140,9 @@ export default function CentralOperationsPage() {
           <div className="mt-12 rounded-xl border border-white/10 bg-white/5 p-4">
             <p className="text-xs text-slate-400">Aktif kullanıcı</p>
             <p className="mt-1 text-sm font-medium">Merkez Operasyon</p>
-            <p className="mt-1 text-xs text-slate-400">81 il operasyon görünümü</p>
+            <p className="mt-1 text-xs text-slate-400">
+              81 il operasyon görünümü
+            </p>
           </div>
         </aside>
 
@@ -163,6 +164,8 @@ export default function CentralOperationsPage() {
               >
                 Bildirimler
               </button>
+
+              <LogoutButton />
 
               <div className="hidden border-l border-[#E4EAF2] pl-3 text-right sm:block">
                 <p className="text-sm font-medium text-[#172033]">
