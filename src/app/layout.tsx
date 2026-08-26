@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Eğitim operasyonları için görev, hazırlık, malzeme ve yoklama yönetimi",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/logo/tiktak-logo.png",
     apple: "/logo/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
