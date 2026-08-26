@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { SORUMLU } from "@/lib/demo/atolye";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 export const NAV = [
   { href: "/atolye-paneli", label: "Genel bakış" },
@@ -14,8 +15,12 @@ export const NAV = [
 ];
 
 export default function PanelShell({
-  children, logout,
-}: { children: ReactNode; logout?: ReactNode }) {
+  children,
+  logout,
+}: {
+  children: ReactNode;
+  logout?: ReactNode;
+}) {
   const pathname = usePathname();
   const isActive = (href: string) =>
     href === "/atolye-paneli" ? pathname === href : pathname.startsWith(href);
@@ -24,8 +29,13 @@ export default function PanelShell({
     <div className="flex min-h-screen bg-[#F6F9FE] text-[#3C4657]">
       <aside className="hidden w-[248px] shrink-0 flex-col bg-[#14213D] px-3.5 py-5 lg:flex">
         <div className="mb-6 px-2">
-          <div className="text-[15px] font-semibold text-white">TikTakTürkiye</div>
-          <div className="mt-0.5 text-xs text-[#9FB0CC]">Eğitim Operasyon Paneli</div>
+          <div className="flex items-center gap-2">
+            <BrandLogo compact />
+            <div className="text-[15px] font-semibold text-white">
+              TikTakTürkiye
+            </div>
+          </div>
+          <div className="mt-0.5 text-xs text-[#9FB0CC]">Eğitim Paneli</div>
         </div>
 
         <nav className="flex flex-col gap-1">
@@ -54,7 +64,9 @@ export default function PanelShell({
               {SORUMLU.basHarf}
             </span>
             <span className="min-w-0">
-              <span className="block truncate text-[13px] text-white">{SORUMLU.ad}</span>
+              <span className="block truncate text-[13px] text-white">
+                {SORUMLU.ad}
+              </span>
               <span className="block truncate text-[11px] text-[#9FB0CC]">
                 {SORUMLU.unvan} · {SORUMLU.atolye}
               </span>
@@ -66,7 +78,9 @@ export default function PanelShell({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex flex-wrap items-center gap-3 border-b border-[#DDE5F0] bg-white px-5 py-3.5 lg:px-8">
           <div className="min-w-0">
-            <div className="text-sm font-semibold text-[#14213D]">Atölye Sorumlusu Paneli</div>
+            <div className="text-sm font-semibold text-[#14213D]">
+              Atölye Sorumlusu Paneli
+            </div>
             <div className="text-xs text-[#667085]">{SORUMLU.atolye}</div>
           </div>
 

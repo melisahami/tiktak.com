@@ -4,11 +4,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { ROLLER, type RolKey } from "@/lib/demo/roller";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 /* Tek kabuk, dört panel. Menü rol tanımından okunur. */
 export default function PanelShell({
-  role, children, logout,
-}: { role: RolKey; children: ReactNode; logout?: ReactNode }) {
+  role,
+  children,
+  logout,
+}: {
+  role: RolKey;
+  children: ReactNode;
+  logout?: ReactNode;
+}) {
   const r = ROLLER[role];
   const pathname = usePathname();
   const isActive = (href: string) =>
@@ -18,8 +25,13 @@ export default function PanelShell({
     <div className="flex min-h-screen bg-[#F6F9FE] text-[#3C4657]">
       <aside className="hidden w-[248px] shrink-0 flex-col bg-[#14213D] px-3.5 py-5 lg:flex">
         <div className="mb-6 px-2">
-          <div className="text-[15px] font-semibold text-white">TikTakTürkiye</div>
-          <div className="mt-0.5 text-xs text-[#9FB0CC]">Eğitim Operasyon Paneli</div>
+          <div className="flex items-center gap-2">
+            <BrandLogo compact />
+            <div className="text-[15px] font-semibold text-white">
+              TikTakTürkiye
+            </div>
+          </div>
+          <div className="mt-0.5 text-xs text-[#9FB0CC]">Eğitim Paneli</div>
         </div>
 
         <nav className="flex flex-col gap-1">
@@ -48,7 +60,9 @@ export default function PanelShell({
               {r.basHarf}
             </span>
             <span className="min-w-0">
-              <span className="block truncate text-[13px] text-white">{r.ad}</span>
+              <span className="block truncate text-[13px] text-white">
+                {r.ad}
+              </span>
               <span className="block truncate text-[11px] text-[#9FB0CC]">
                 {r.unvan} · {r.kapsam}
               </span>
@@ -60,7 +74,9 @@ export default function PanelShell({
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex flex-wrap items-center gap-3 border-b border-[#DDE5F0] bg-white px-5 py-3.5 lg:px-8">
           <div className="min-w-0">
-            <div className="text-sm font-semibold text-[#14213D]">{r.unvan} Paneli</div>
+            <div className="text-sm font-semibold text-[#14213D]">
+              {r.unvan} Paneli
+            </div>
             <div className="text-xs text-[#667085]">{r.kapsam}</div>
           </div>
 
