@@ -57,15 +57,44 @@ export default function IlGenelBakis() {
           {ATOLYELER.filter((a) => a.il === IL).map((a) => (
             <div
               key={a.ad}
-              className="mb-2.5 flex flex-wrap items-center gap-3.5 rounded-lg border border-[#DDE5F0] px-4 py-3.5 last:mb-0"
+              className="mb-2.5 flex flex-wrap items-start gap-3.5 rounded-lg border border-[#DDE5F0] px-4 py-3.5 last:mb-0"
             >
               <div className="min-w-[190px]">
                 <div className="text-[15px] font-semibold text-[#14213D]">{a.ad}</div>
                 <div className="mt-0.5 text-[13px] text-[#667085]">
                   {a.sorumlu} · {a.meta}
                 </div>
+                {/* Yoklama yüzdeleri */}
+                <div className="mt-2.5 grid gap-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-[90px] shrink-0 text-[12px] text-[#667085]">Öğrenci yokl.</span>
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-sm bg-[#E9EFF9]">
+                      <div
+                        className="h-full rounded-sm bg-[#356AE6]"
+                        style={{ width: `${a.ogrenciYoklama}%` }}
+                      />
+                    </div>
+                    <span className="w-8 shrink-0 text-right text-[12px] font-semibold text-[#3C4657]">
+                      %{a.ogrenciYoklama}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-[90px] shrink-0 text-[12px] text-[#667085]">Eğitmen yokl.</span>
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-sm bg-[#E9EFF9]">
+                      <div
+                        className="h-full rounded-sm bg-[#14213D]"
+                        style={{ width: `${a.egitmenYoklama}%` }}
+                      />
+                    </div>
+                    <span className="w-8 shrink-0 text-right text-[12px] font-semibold text-[#3C4657]">
+                      %{a.egitmenYoklama}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <Chip>{a.durum}</Chip>
+              <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                <Chip>{a.durum}</Chip>
+              </div>
               <Link
                 href="/il-paneli/atolyeler"
                 className="ml-auto rounded-lg border border-[#DDE5F0] px-3 py-1.5 text-[13px] text-[#243B64] no-underline hover:bg-[#F6F9FE]"

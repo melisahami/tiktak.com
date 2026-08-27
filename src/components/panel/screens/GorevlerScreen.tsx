@@ -1,6 +1,6 @@
-"use client";
+﻿"use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Card,
   CardHead,
@@ -18,21 +18,29 @@ import {
   TR,
 } from "@/components/panel/ui";
 import { GOREVLER, GOREV_ALT_ADIMLARI, type Gorev } from "@/lib/demo/operasyon";
+import {
+  getTamamlananGorevler,
+  goreviTamamla,
+  type TamamlananGorev,
+} from "@/lib/demo/gorev-store";
 
 const SEKMELER = ["Alt adımlar", "Kapsam", "İşlem geçmişi"] as const;
 
 /* Merkez ve İl panellerinin paylaştığı görev listesi + detay.
-   ilFiltresi verilirse yalnızca o ilin görevleri listelenir. */
+   ilFiltresi verilirse yalnızca o ilin görevleri listelenir.
+   showTamamla=true olduğunda "Tamamlandı" butonu aktif olur (il sorumlusu rolü). */
 export default function GorevlerScreen({
   baslik,
   alt,
   ilFiltresi,
   listeBasligi,
+  showTamamla,
 }: {
   baslik: string;
   alt: string;
   ilFiltresi?: string;
   listeBasligi?: string;
+  showTamamla?: boolean;
 }) {
   const kaynak = useMemo(
     () => (ilFiltresi ? GOREVLER.filter((g) => g.il === ilFiltresi) : GOREVLER),
@@ -43,19 +51,55 @@ export default function GorevlerScreen({
   const [oncelik, setOncelik] = useState("Tümü");
   const [secili, setSecili] = useState<Gorev | null>(null);
   const [sekme, setSekme] = useState<(typeof SEKMELER)[number]>("Alt adımlar");
+  const [tamamlananlar, setTamamlananlar] = useState<Record<string, TamamlananGorev>>({});
+  const [onayMesaj, setOnayMesaj] = useState<string | null>(null);
+
+  // showTamamla prop verilmemişse ilFiltresi varlığına göre otomatik belirle
+  const kapatmaAktif = showTamamla ?? Boolean(ilFiltresi);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setTamamlananlar(getTamamlananGorevler());
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const goreviKapat = (gorev: Gorev) => {
+    goreviTamamla(gorev.id, gorev.sorumlu);
+    setTamamlananlar(getTamamlananGorevler());
+    setOnayMesaj(
+      `"${gorev.ad}" görevi tamamlandı olarak işaretlendi. Yönetici ve koordinatöre bildirim gönderildi.`,
+    );
+    window.setTimeout(() => setOnayMesaj(null), 5000);
+  };
+
+  const gercekDurum = (gorev: Gorev) =>
+    gorev.id in tamamlananlar ? "Tamamlandı" : gorev.durum;
 
   const satirlar = kaynak.filter((g) => {
-    if (durum !== "Tümü" && g.durum !== durum) return false;
+    const gd = gercekDurum(g);
+    if (durum !== "Tümü" && gd !== durum) return false;
     if (oncelik !== "Tümü" && g.oncelik !== oncelik) return false;
     return true;
   });
 
-  const durumlar = ["Tümü", ...Array.from(new Set(kaynak.map((g) => g.durum)))];
+  const durumlar = [
+    "Tümü",
+    ...Array.from(
+      new Set(kaynak.map((g) => gercekDurum(g))),
+    ),
+  ];
   const oncelikler = ["Tümü", "Kritik", "Yüksek", "Orta", "Düşük"];
 
   return (
     <div>
       <PageTitle title={baslik} sub={alt} />
+
+      {onayMesaj ? (
+        <div className="mb-4 rounded-lg border border-[#C7E4D6] bg-[#E9F5EF] px-4 py-3 text-sm text-[#106B4A]">
+          {onayMesaj}
+        </div>
+      ) : null}
 
       <Card className="mb-[18px] px-[18px] py-4">
         <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
@@ -134,35 +178,58 @@ export default function GorevlerScreen({
             ]}
             minWidth={1080}
           >
-            {satirlar.map((g) => (
-              <tr key={g.id} className={TR}>
-                <td className={TD}>{g.ad}</td>
-                <td className={`${TD} text-[#667085]`}>
-                  {g.il} / {g.atolye}
-                </td>
-                <td className={TD}>{g.sorumlu}</td>
-                <td className={`${TD} whitespace-nowrap`}>{g.termin}</td>
-                <td className={TD}>
-                  <Chip>{g.durum}</Chip>
-                </td>
-                <td className={TD}>
-                  <Chip>{g.oncelik}</Chip>
-                </td>
-                <td
-                  className={`${TD} ${g.gecikme === "—" ? "text-[#667085]" : "text-[#9B2C2C]"}`}
-                >
-                  {g.gecikme}
-                </td>
-                <td className={`${TD} min-w-[150px]`}>
-                  <Progress pct={g.ilerleme} />
-                </td>
-                <td className={TD}>
-                  <RowButton type="button" onClick={() => setSecili(g)}>
-                    Görevi aç
-                  </RowButton>
-                </td>
-              </tr>
-            ))}
+            {satirlar.map((g) => {
+              const tamamlandi = g.id in tamamlananlar;
+              const gosterilecekDurum = tamamlandi ? "Tamamlandı" : g.durum;
+              return (
+                <tr key={g.id} className={TR}>
+                  <td className={TD}>{g.ad}</td>
+                  <td className={`${TD} text-[#667085]`}>
+                    {g.il} / {g.atolye}
+                  </td>
+                  <td className={TD}>{g.sorumlu}</td>
+                  <td className={`${TD} whitespace-nowrap`}>{g.termin}</td>
+                  <td className={TD}>
+                    <Chip>{gosterilecekDurum}</Chip>
+                  </td>
+                  <td className={TD}>
+                    <Chip>{g.oncelik}</Chip>
+                  </td>
+                  <td
+                    className={`${TD} ${g.gecikme === "—" ? "text-[#667085]" : "text-[#9B2C2C]"}`}
+                  >
+                    {tamamlandi ? "—" : g.gecikme}
+                  </td>
+                  <td className={`${TD} min-w-[150px]`}>
+                    <Progress pct={tamamlandi ? 100 : g.ilerleme} />
+                  </td>
+                  <td className={`${TD} whitespace-nowrap`}>
+                    {tamamlandi ? (
+                      <span className="text-[13px] text-[#106B4A]">
+                        ✓ Tamamlandı
+                      </span>
+                    ) : kapatmaAktif ? (
+                      <div className="flex gap-1.5">
+                        <RowButton type="button" onClick={() => setSecili(g)}>
+                          Görevi aç
+                        </RowButton>
+                        <RowButton
+                          type="button"
+                          onClick={() => goreviKapat(g)}
+                          className="border-[#C7E4D6] bg-[#E9F5EF] text-[#106B4A] hover:bg-[#D4EFE2]"
+                        >
+                          Tamamlandı
+                        </RowButton>
+                      </div>
+                    ) : (
+                      <RowButton type="button" onClick={() => setSecili(g)}>
+                        Görevi aç
+                      </RowButton>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </Table>
         )}
       </Card>
@@ -181,12 +248,29 @@ export default function GorevlerScreen({
                 Sorumlu: {secili.sorumlu} · Termin: {secili.termin}
               </div>
               <div className="mt-2.5 flex flex-wrap items-center gap-2">
-                <Chip>{secili.durum}</Chip>
+                <Chip>{secili.id in tamamlananlar ? "Tamamlandı" : secili.durum}</Chip>
                 <Chip>{secili.oncelik}</Chip>
                 <span className="text-[13px] text-[#667085]">
-                  Son güncelleme: {secili.guncelleme}
+                  Son güncelleme:{" "}
+                  {secili.id in tamamlananlar
+                    ? tamamlananlar[secili.id].zaman
+                    : secili.guncelleme}
                 </span>
               </div>
+              {secili.id in tamamlananlar ? (
+                <div className="mt-3 rounded-lg border border-[#C7E4D6] bg-[#E9F5EF] px-3 py-2 text-[13px] text-[#106B4A]">
+                  Bu görev <strong>{tamamlananlar[secili.id].kapatan}</strong> tarafından{" "}
+                  <strong>{tamamlananlar[secili.id].zaman}</strong> tarihinde tamamlandı olarak kapatıldı.
+                </div>
+              ) : kapatmaAktif ? (
+                <button
+                  type="button"
+                  onClick={() => goreviKapat(secili)}
+                  className="mt-3 rounded-lg border border-[#C7E4D6] bg-[#E9F5EF] px-4 py-2 text-[13px] font-semibold text-[#106B4A] hover:bg-[#D4EFE2]"
+                >
+                  Görevi tamamlandı olarak kapat
+                </button>
+              ) : null}
             </div>
             <button
               type="button"
@@ -217,8 +301,8 @@ export default function GorevlerScreen({
                 {[
                   { e: "İl", d: secili.il },
                   { e: "Atölye", d: secili.atolye },
-                  { e: "İlerleme", d: `%${secili.ilerleme}` },
-                  { e: "Risk", d: secili.risk },
+                  { e: "İlerleme", d: secili.id in tamamlananlar ? "%100" : `%${secili.ilerleme}` },
+                  { e: "Risk", d: secili.id in tamamlananlar ? "Tamamlandı" : secili.risk },
                 ].map((k) => (
                   <div
                     key={k.e}
@@ -231,6 +315,16 @@ export default function GorevlerScreen({
               </div>
             ) : (
               <div className="grid gap-2.5">
+                {secili.id in tamamlananlar ? (
+                  <div className="rounded-lg border border-[#DDE5F0] px-3.5 py-3">
+                    <div className="text-[13px] text-[#667085]">
+                      {tamamlananlar[secili.id].zaman} · {tamamlananlar[secili.id].kapatan}
+                    </div>
+                    <div className="mt-1 text-sm text-[#14213D]">
+                      Görev tamamlandı olarak kapatıldı.
+                    </div>
+                  </div>
+                ) : null}
                 {[
                   {
                     z: secili.guncelleme,

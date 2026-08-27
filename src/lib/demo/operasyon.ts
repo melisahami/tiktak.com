@@ -70,12 +70,16 @@ export const EGITIM_BASLANGICLARI = [
 export type Atolye = {
   ad: string; il: string; sorumlu: string; egitim: string;
   durum: Durum; eksikKalem: number; meta: string;
+  /** Öğrenci yoklaması giriş yüzdesi (0–100) */
+  ogrenciYoklama: number;
+  /** Eğitmen yoklaması giriş yüzdesi (0–100) */
+  egitmenYoklama: number;
 };
 
 export const ATOLYELER: Atolye[] = [
-  { ad: "Üsküdar Atölyesi", il: "İstanbul", sorumlu: "Zeynep Yıldız", egitim: "Robotik ve Kodlama", durum: "Eksik var", eksikKalem: 3, meta: "2 grup · 29 öğrenci" },
-  { ad: "Kadıköy Atölyesi", il: "İstanbul", sorumlu: "Murat Eren", egitim: "Robotik ve Kodlama", durum: "Hazır", eksikKalem: 0, meta: "2 grup · 30 öğrenci" },
-  { ad: "Beşiktaş Atölyesi", il: "İstanbul", sorumlu: "Nazlı Şimşek", egitim: "Temel Elektronik", durum: "Devam ediyor", eksikKalem: 1, meta: "1 grup · 15 öğrenci" },
+  { ad: "Üsküdar Atölyesi", il: "İstanbul", sorumlu: "Zeynep Yıldız", egitim: "Robotik ve Kodlama", durum: "Eksik var", eksikKalem: 3, meta: "2 grup · 29 öğrenci", ogrenciYoklama: 72, egitmenYoklama: 85 },
+  { ad: "Kadıköy Atölyesi", il: "İstanbul", sorumlu: "Murat Eren", egitim: "Robotik ve Kodlama", durum: "Hazır", eksikKalem: 0, meta: "2 grup · 30 öğrenci", ogrenciYoklama: 94, egitmenYoklama: 100 },
+  { ad: "Beşiktaş Atölyesi", il: "İstanbul", sorumlu: "Nazlı Şimşek", egitim: "Temel Elektronik", durum: "Devam ediyor", eksikKalem: 1, meta: "1 grup · 15 öğrenci", ogrenciYoklama: 60, egitmenYoklama: 75 },
 ];
 
 export type Talep = {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Card,
@@ -18,6 +18,7 @@ import {
   TR,
 } from "@/components/panel/ui";
 import { GOREVLER, ILLER, RISKLER } from "@/lib/demo/operasyon";
+import { getTamamlananGorevler, type TamamlananGorev } from "@/lib/demo/gorev-store";
 
 const HIZLI = [
   "Geciken",
@@ -60,6 +61,14 @@ export default function OperasyonTakibiClient() {
   const [durum, setDurum] = useState("Tümü");
   const [oncelik, setOncelik] = useState("Tümü");
   const [hizli, setHizli] = useState<string | null>(null);
+  const [tamamlananlar, setTamamlananlar] = useState<Record<string, TamamlananGorev>>({});
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setTamamlananlar(getTamamlananGorevler());
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const iller = ["Tümü", ...ILLER.map((i) => i.ad)];
   const sorumlular = [
@@ -327,7 +336,9 @@ export default function OperasyonTakibiClient() {
                 ]}
                 minWidth={1000}
               >
-                {satirlar.map((c) => (
+                {satirlar.map((c) => {
+                  const tamamlandi = c.id in tamamlananlar;
+                  return (
                   <tr key={c.id} className={TR}>
                     <td className={TD}>{c.ad}</td>
                     <td className={`${TD} text-[#667085]`}>
@@ -335,20 +346,23 @@ export default function OperasyonTakibiClient() {
                     </td>
                     <td className={TD}>{c.sorumlu}</td>
                     <td className={TD}>
-                      <Chip>{c.durum}</Chip>
+                      <Chip>{tamamlandi ? "Tamamlandı" : c.durum}</Chip>
                     </td>
                     <td className={TD}>
                       <Chip>{c.oncelik}</Chip>
                     </td>
                     <td className={`${TD} whitespace-nowrap`}>{c.termin}</td>
                     <td
-                      className={`${TD} ${c.gecikme === "—" ? "text-[#667085]" : "text-[#9B2C2C]"}`}
+                      className={`${TD} ${c.gecikme === "—" || tamamlandi ? "text-[#667085]" : "text-[#9B2C2C]"}`}
                     >
-                      {c.gecikme}
+                      {tamamlandi ? "—" : c.gecikme}
                     </td>
-                    <td className={`${TD} text-[#667085]`}>{c.guncelleme}</td>
+                    <td className={`${TD} text-[#667085]`}>
+                      {tamamlandi ? tamamlananlar[c.id].zaman : c.guncelleme}
+                    </td>
                   </tr>
-                ))}
+                  );
+                })}
               </Table>
             )
           ) : null}
