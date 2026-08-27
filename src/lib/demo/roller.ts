@@ -21,8 +21,8 @@ export const ROLLER: Record<RolKey, Rol> = {
     nav: [
       { href: "/merkez-paneli", label: "Genel bakış" },
       { href: "/merkez-paneli/gorevler", label: "Görevler" },
-      { href: "/merkez-paneli/egitimler", label: "Eğitimler" },
       { href: "/merkez-paneli/gorevler/yeni", label: "Görev oluştur" },
+      { href: "/merkez-paneli/egitimler", label: "Eğitimler" },
       { href: "/merkez-paneli/iller", label: "İller" },
       { href: "/merkez-paneli/bildirimler", label: "Bildirimler" },
     ],
