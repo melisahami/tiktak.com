@@ -211,7 +211,7 @@ export interface InstructorTask {
   group: string;
   dueDate: string;
   priority: "Kritik" | "Orta" | "Düşük";
-  status: "Başık var" | "Beklemede" | "Tamamlandı" | "Devam ediyor";
+  status: "Devam ediyor" | "Beklemede" | "Tamamlandı";
   progress: number;
   action: string;
 }
@@ -246,48 +246,59 @@ export const MOCK_WORKSHOP_ANALYTICS: WorkshopAnalytics = {
 
 export const MOCK_INSTRUCTOR_TASKS: InstructorTask[] = [
   {
-    id: "1",
-    title: "Robotik ve Kodlama tüm dönem malzeme kontrolü tamzlaması",
-    course: "Robotik ve Kodlama / Grup A",
-    group: "A",
-    dueDate: "20 Eylül 2026",
-    priority: "Kritik",
-    status: "Başık var",
+    id: '1',
+    title: 'Öğrencileri eğitim gruplarına böl',
+    course: 'Robotik ve Kodlama',
+    group: 'Grup A & B',
+    dueDate: '22 Eylül 2026',
+    priority: 'Kritik',
+    status: 'Devam ediyor',
     progress: 50,
-    action: "Görevi açyoldırıdı",
+    action: 'Grupları düzenle',
   },
   {
-    id: "2",
-    title: "Eğitmen hazırlık durumumuş kontrol et",
-    course: "Robotik ve Kodlama",
-    group: "",
-    dueDate: "18 Eylül 2026",
-    priority: "Orta",
-    status: "Devam ediyor",
-    progress: 60,
-    action: "Eğitim hazırlığına git",
-  },
-  {
-    id: "3",
-    title: "Hafta 3 yoklama sonuçlarını kontrol et",
-    course: "Robotik ve Kodlama / Grup A",
-    group: "",
-    dueDate: "18 Eylül 2026",
-    priority: "Orta",
-    status: "Beklemede",
+    id: '2',
+    title: 'Proje şenliği için takım oluştur',
+    course: 'Robotik ve Kodlama',
+    group: 'Tüm gruplar',
+    dueDate: '25 Eylül 2026',
+    priority: 'Orta',
+    status: 'Beklemede',
     progress: 0,
-    action: "Eğilimlerine git",
+    action: 'Takımları oluştur',
   },
   {
-    id: "4",
-    title: "Eğitim dokumentlarını eğilenmerlere paylaş",
-    course: "Robotik ve Kodlama",
-    group: "",
-    dueDate: "16 Eylül 2026",
-    priority: "Düşük",
-    status: "Tamamlandı",
+    id: '3',
+    title: 'Hafta 3 yoklama sonuçlarını kontrol et',
+    course: 'Robotik ve Kodlama',
+    group: 'Grup A',
+    dueDate: '18 Eylül 2026',
+    priority: 'Orta',
+    status: 'Beklemede',
+    progress: 0,
+    action: 'Yoklama geçmişine git',
+  },
+  {
+    id: '4',
+    title: 'Eğitim dokümanlarını öğrencilerle paylaş',
+    course: 'Robotik ve Kodlama',
+    group: 'Tüm gruplar',
+    dueDate: '16 Eylül 2026',
+    priority: 'Düşük',
+    status: 'Tamamlandı',
     progress: 100,
-    action: "Görevi açyoldırıdı",
+    action: 'Detayı görüntüle',
+  },
+  {
+    id: '5',
+    title: 'Tüm dönem malzeme kontrolünü tamamla',
+    course: 'Robotik ve Kodlama',
+    group: 'Grup A',
+    dueDate: '20 Eylül 2026',
+    priority: 'Kritik',
+    status: 'Devam ediyor',
+    progress: 50,
+    action: 'Malzeme listesini aç',
   },
 ];
 
@@ -410,6 +421,13 @@ export const MOCK_WORKSHOP_NOTIFICATIONS: WorkshopNotification[] = [
 ];
 
 // Instructor/Eğitmen veri tipleri
+export interface HaftaDokumani {
+  hafta: number;
+  konu: string;
+  dersnotu: { ad: string; meta: string };
+  malzeme: { ad: string; meta: string };
+}
+
 export interface InstructorCourse {
   id: string;
   name: string;
@@ -421,6 +439,7 @@ export interface InstructorCourse {
   nextLessonTime: string;
   activeStudents: number;
   attendanceStatus: "open" | "closed";
+  haftaDokumanlari: HaftaDokumani[];
 }
 
 export interface ActiveAttendance {
@@ -476,6 +495,11 @@ export const MOCK_INSTRUCTOR_COURSES: InstructorCourse[] = [
     nextLessonTime: "14:00",
     activeStudents: 15,
     attendanceStatus: "open",
+    haftaDokumanlari: [
+      { hafta: 1, konu: 'Robotik Temelleri', dersnotu: { ad: 'Hafta 1 – Robotik Temelleri Ders Notu.pdf', meta: 'PDF · 1.8 MB · Merkez Operasyon' }, malzeme: { ad: 'Hafta 1 – Arduino Starter Kit Listesi.pdf', meta: 'PDF · 320 KB · Merkez Operasyon' } },
+      { hafta: 2, konu: 'Arduino Temelleri', dersnotu: { ad: 'Hafta 2 – Arduino Programlama Ders Notu.pdf', meta: 'PDF · 2.1 MB · Merkez Operasyon' }, malzeme: { ad: 'Hafta 2 – Breadboard ve Kablo Listesi.pdf', meta: 'PDF · 280 KB · Merkez Operasyon' } },
+      { hafta: 3, konu: 'Harita Oluşturma (SLAM)', dersnotu: { ad: 'Hafta 3 – SLAM ve Sensörler Ders Notu.pdf', meta: 'PDF · 2.4 MB · Merkez Operasyon' }, malzeme: { ad: 'Hafta 3 – Ultrasonik Sensör Listesi.pdf', meta: 'PDF · 310 KB · Merkez Operasyon' } },
+    ],
   },
   {
     id: "2",
@@ -488,6 +512,10 @@ export const MOCK_INSTRUCTOR_COURSES: InstructorCourse[] = [
     nextLessonTime: "10:00",
     activeStudents: 12,
     attendanceStatus: "closed",
+    haftaDokumanlari: [
+      { hafta: 1, konu: 'Python Giriş', dersnotu: { ad: 'Hafta 1 – Python Temelleri Ders Notu.pdf', meta: 'PDF · 1.5 MB · Merkez Operasyon' }, malzeme: { ad: 'Hafta 1 – Gerekli Yazılım Kurulum Rehberi.pdf', meta: 'PDF · 450 KB · Merkez Operasyon' } },
+      { hafta: 2, konu: 'Değişkenler ve Veri Tipleri', dersnotu: { ad: 'Hafta 2 – Değişkenler ve Operatörler.pdf', meta: 'PDF · 1.2 MB · Merkez Operasyon' }, malzeme: { ad: 'Hafta 2 – Alıştırma Dosyaları.pdf', meta: 'PDF · 180 KB · Merkez Operasyon' } },
+    ],
   },
   {
     id: "3",
@@ -500,6 +528,9 @@ export const MOCK_INSTRUCTOR_COURSES: InstructorCourse[] = [
     nextLessonTime: "16:00",
     activeStudents: 10,
     attendanceStatus: "closed",
+    haftaDokumanlari: [
+      { hafta: 1, konu: 'HTML ve Yapısal İçerik', dersnotu: { ad: 'Hafta 1 – HTML Temelleri Ders Notu.pdf', meta: 'PDF · 1.3 MB · Merkez Operasyon' }, malzeme: { ad: 'Hafta 1 – Proje Başlangıç Şablonu.pdf', meta: 'PDF · 210 KB · Merkez Operasyon' } },
+    ],
   },
 ];
 

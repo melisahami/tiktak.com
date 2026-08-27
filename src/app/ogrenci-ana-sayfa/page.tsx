@@ -19,6 +19,7 @@ import {
   type OpenAttendance,
 } from "@/data/demo/ogrenci";
 import { readSession } from "@/lib/auth/session";
+import { getPin, getAllPins } from "@/lib/demo/pin-store";
 import { useState } from "react";
 
 export default function StudentHomePage() {
@@ -63,6 +64,26 @@ export default function StudentHomePage() {
   const handleSubmitAttendancePin = async (pin: string): Promise<boolean> => {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
+    // Önce eğitmenin localStorage'a yazdığı gerçek zamanlı PIN'i kontrol et
+    if (selectedOpenAttendance?.courseId) {
+      const livePin = getPin(selectedOpenAttendance.courseId);
+      if (livePin && livePin.pin === pin) {
+        const currentTime = new Date().toLocaleTimeString("tr-TR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        setOpenAttendances((prev) =>
+          prev.map((a) =>
+            a.id === selectedOpenAttendance.id
+              ? { ...a, isSubmitted: true, submittedAt: currentTime }
+              : a,
+          ),
+        );
+        return true;
+      }
+    }
+
+    // Fallback: mock veri PIN'i kontrol et
     if (selectedOpenAttendance?.pin === pin) {
       const currentTime = new Date().toLocaleTimeString("tr-TR", {
         hour: "2-digit",

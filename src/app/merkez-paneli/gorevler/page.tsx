@@ -4,7 +4,8 @@ export default function Page() {
   return (
     <GorevlerScreen
       baslik="Görevler"
-      alt="Tüm illere atanan dönem görevleri ve alt adımları."
+      alt="Merkez tarafından oluşturulan görevler, durumları ve işlem geçmişi."
+      listeBasligi="Oluşturulan görev geçmişi"
     />
   );
 }
