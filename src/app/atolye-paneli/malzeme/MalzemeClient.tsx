@@ -53,7 +53,7 @@ export default function MalzemeClient() {
     if (egitim !== "Tümü" && m.egitim !== egitim) return false;
     if (grup !== "Tümü" && m.grup !== grup) return false;
     if (durumF !== "Tümü" && durumu(m) !== durumF) return false;
-    const t = talepler[m.id] ?? (m.mevcut < m.gerekli ? "Açık" : "—");
+    const t = talepler[m.id] ?? "—";
     if (talepF !== "Tümü" && t !== talepF) return false;
     return true;
   });
@@ -210,7 +210,7 @@ export default function MalzemeClient() {
             {gorunen.map((m) => {
               const fark = m.mevcut - m.gerekli;
               const talep: string =
-                talepler[m.id] ?? (m.mevcut < m.gerekli ? "Açık" : "—");
+                talepler[m.id] ?? "—";
               return (
                 <tr key={m.id} className={TR}>
                   <td className={`${TD} text-[#667085]`}>{m.egitim}</td>
@@ -302,7 +302,7 @@ export default function MalzemeClient() {
                     <span className="flex-1 text-[13px] text-[#8B95A6]">
                       {m.egitim} · {m.grup} · {m.hafta} kullanımı
                     </span>
-                    <Chip>{talepler[m.id] ?? "Açık"}</Chip>
+                    <Chip>{talepler[m.id] ?? "Talep edilmedi"}</Chip>
                   </div>
                 ))}
               </div>

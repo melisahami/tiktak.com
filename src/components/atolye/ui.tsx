@@ -12,6 +12,7 @@ const CIP: Record<string, string> = {
   "Transfer planlandı": "bg-[#E6EEFA] text-[#1F3D77] border-[#CFDDF3]",
   "Orta": "bg-[#E6EEFA] text-[#1F3D77] border-[#CFDDF3]",
   "Açık": "bg-[#FDF4E3] text-[#8A5F0F] border-[#EFDFBE]",
+  "Talep edilmedi": "bg-[#E9EFF9] text-[#4A5568] border-[#DDE4EF]",
   "Eksik": "bg-[#FDF4E3] text-[#8A5F0F] border-[#EFDFBE]",
   "Eksik var": "bg-[#FDF4E3] text-[#8A5F0F] border-[#EFDFBE]",
   "Geç katıldı": "bg-[#FDF4E3] text-[#8A5F0F] border-[#EFDFBE]",
