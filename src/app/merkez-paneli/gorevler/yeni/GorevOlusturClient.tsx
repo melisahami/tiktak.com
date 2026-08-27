@@ -31,12 +31,17 @@ export default function GorevOlusturClient() {
   ]);
   const [altGorev, setAltGorev] = useState(true);
   const [aciklama, setAciklama] = useState("");
-  const [kaydedildi, setKaydedildi] = useState(false);
+  const [islemMesaji, setIslemMesaji] = useState<string | null>(null);
 
   const gecerli =
     baslik.trim().length > 8 &&
     secilenIller.length > 0 &&
     secilenKullanicilar.length > 0;
+
+  const tamamlaVeYenile = (mesaj: string) => {
+    setIslemMesaji(mesaj);
+    window.setTimeout(() => window.location.reload(), 800);
+  };
 
   return (
     <div className="max-w-[920px]">
@@ -53,13 +58,9 @@ export default function GorevOlusturClient() {
         />
       </div>
 
-      {kaydedildi ? (
+      {islemMesaji ? (
         <div className="mb-[18px]">
-          <Notice tone="ok">
-            Görev oluşturuldu ve {secilenKullanicilar.length} kullanıcıya
-            atandı.
-            {altGorev ? " Atölye alt görevleri otomatik üretildi." : ""}
-          </Notice>
+          <Notice tone="ok">{islemMesaji}</Notice>
         </div>
       ) : null}
 
@@ -144,7 +145,9 @@ export default function GorevOlusturClient() {
                 />
                 <span className="min-w-0">
                   <span className="block text-sm text-[#14213D]">
-                    {user.fullName}
+                    {user.id === "istanbul-il-sorumlusu"
+                      ? "İl Sorumlusu"
+                      : user.fullName}
                   </span>
                   <span className="mt-0.5 block text-xs text-[#667085]">
                     {user.organization}
@@ -213,10 +216,17 @@ export default function GorevOlusturClient() {
       </Card>
 
       <div className="flex flex-wrap gap-2.5">
-        <Primary disabled={!gecerli} onClick={() => setKaydedildi(true)}>
+        <Primary
+          disabled={!gecerli}
+          onClick={() =>
+            tamamlaVeYenile(
+              `Görev oluşturuldu ve ${secilenKullanicilar.length} kullanıcıya atandı.${altGorev ? " Atölye alt görevleri otomatik üretildi." : ""}`,
+            )
+          }
+        >
           Görevi oluştur ve ata
         </Primary>
-        <Secondary onClick={() => setKaydedildi(false)}>
+        <Secondary onClick={() => tamamlaVeYenile("Görev taslağı kaydedildi.")}>
           Taslak olarak kaydet
         </Secondary>
         {!gecerli ? (
