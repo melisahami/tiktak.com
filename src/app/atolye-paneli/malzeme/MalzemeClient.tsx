@@ -44,9 +44,9 @@ export default function MalzemeClient() {
   );
 
   const durumu = (m: { gerekli: number; mevcut: number }) => {
-    const eksik = m.gerekli - m.mevcut;
-    if (eksik <= 0) return "Uygun";
-    return eksik >= 3 ? "Kritik eksik" : "Eksik";
+    if (m.mevcut < m.gerekli) return "Eksik";
+    if (m.mevcut === m.gerekli) return "Tam";
+    return "Fazla";
   };
 
   const gorunen = satirlar.filter((m) => {
@@ -60,23 +60,43 @@ export default function MalzemeClient() {
 
   const eksikler = satirlar.filter((m) => m.mevcut < m.gerekli);
   const toplamEksik = eksikler.reduce((t, m) => t + (m.gerekli - m.mevcut), 0);
-  const acikEksik = eksikler.filter(
-    (m) => (talepler[m.id] ?? "Açık") !== "Teslim alındı",
-  );
+  const [selectedEksikler, setSelectedEksikler] = useState<number[]>([]);
 
   function mevcutGuncelle(id: number, deger: string) {
     const n = Math.max(0, Number(deger.replace(/[^0-9]/g, "")) || 0);
     setSatirlar((l) => l.map((m) => (m.id === id ? { ...m, mevcut: n } : m)));
+    // If it is no longer missing, unselect it
+    if (n >= (satirlar.find((s) => s.id === id)?.gerekli ?? 0)) {
+      setSelectedEksikler((prev) => prev.filter((x) => x !== id));
+    }
   }
 
-  function hepsineUygula(d: TalepDurumu, bilgi: string) {
+  function seciliOlanlariTalepEt() {
+    if (selectedEksikler.length === 0) return;
     setTalepler((t) => {
       const y = { ...t };
-      for (const m of eksikler) y[m.id] = d;
+      for (const id of selectedEksikler) y[id] = "Açık";
       return y;
     });
-    setMesaj(bilgi);
+    setMesaj(
+      `Seçilen ${selectedEksikler.length} kalem malzeme için temin talebi oluşturuldu ve İl Sorumlusuna iletildi.`,
+    );
+    setSelectedEksikler([]);
   }
+
+  const toggleSelect = (id: number) => {
+    setSelectedEksikler((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedEksikler.length === eksikler.length) {
+      setSelectedEksikler([]);
+    } else {
+      setSelectedEksikler(eksikler.map((m) => m.id));
+    }
+  };
 
   return (
     <div>
@@ -136,7 +156,7 @@ export default function MalzemeClient() {
               onChange={(e) => setDurumF(e.target.value)}
               className={CONTROL}
             >
-              {["Tümü", "Uygun", "Eksik", "Kritik eksik"].map((o) => (
+              {["Tümü", "Tam", "Eksik", "Fazla"].map((o) => (
                 <option key={o} value={o}>
                   {o}
                 </option>
@@ -181,16 +201,16 @@ export default function MalzemeClient() {
               "Malzeme",
               "Gerekli",
               "Mevcut",
-              "Eksik",
+              "Fark",
               "Durum",
               "Talep durumu",
             ]}
             minWidth={1060}
           >
             {gorunen.map((m) => {
-              const eksik = Math.max(0, m.gerekli - m.mevcut);
+              const fark = m.mevcut - m.gerekli;
               const talep: string =
-                talepler[m.id] ?? (eksik > 0 ? "Açık" : "—");
+                talepler[m.id] ?? (m.mevcut < m.gerekli ? "Açık" : "—");
               return (
                 <tr key={m.id} className={TR}>
                   <td className={`${TD} text-[#667085]`}>{m.egitim}</td>
@@ -208,9 +228,9 @@ export default function MalzemeClient() {
                     />
                   </td>
                   <td
-                    className={`${TD} ${eksik > 0 ? "text-[#9B2C2C]" : "text-[#667085]"}`}
+                    className={`${TD} ${fark < 0 ? "text-[#9B2C2C]" : fark > 0 ? "text-[#106B4A]" : "text-[#667085]"}`}
                   >
-                    {eksik}
+                    {Math.abs(fark)}
                   </td>
                   <td className={TD}>
                     <Chip>{durumu(m)}</Chip>
@@ -246,66 +266,57 @@ export default function MalzemeClient() {
               sub="Atölye hazırlığı için malzeme koşulu sağlandı."
             />
           ) : (
-            eksikler.map((m) => (
-              <div
-                key={m.id}
-                className="flex flex-wrap items-center gap-3 border-b border-[#E9EFF9] py-2.5 last:border-0"
-              >
-                <span className="min-w-[170px] text-sm">{m.ad}</span>
-                <span className="min-w-[80px] text-sm text-[#667085]">
-                  {m.gerekli - m.mevcut} adet
-                </span>
-                <Chip>{talepler[m.id] ?? "Açık"}</Chip>
-                <span className="flex-1 text-[13px] text-[#8B95A6]">
-                  {m.hafta} kullanımı
-                </span>
-                <RowButton
-                  type="button"
-                  onClick={() =>
-                    setTalepler((t) => ({ ...t, [m.id]: "Transfer planlandı" }))
+            <div className="overflow-hidden rounded-lg border border-[#DDE5F0]">
+              <div className="flex items-center gap-3 border-b border-[#DDE5F0] bg-[#F6F9FE] p-3">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 cursor-pointer"
+                  checked={
+                    selectedEksikler.length > 0 &&
+                    selectedEksikler.length === eksikler.length
                   }
-                >
-                  Transfer planla
-                </RowButton>
+                  onChange={toggleSelectAll}
+                />
+                <span className="text-sm font-semibold text-[#14213D]">
+                  Tümünü Seç
+                </span>
               </div>
-            ))
+              <div className="p-3">
+                {eksikler.map((m) => (
+                  <div
+                    key={m.id}
+                    className="flex flex-wrap items-center gap-3 border-b border-[#E9EFF9] py-2.5 last:border-0"
+                  >
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 cursor-pointer"
+                      checked={selectedEksikler.includes(m.id)}
+                      onChange={() => toggleSelect(m.id)}
+                    />
+                    <span className="min-w-[170px] text-sm font-medium">
+                      {m.ad}
+                    </span>
+                    <span className="min-w-[80px] text-sm font-semibold text-[#9B2C2C]">
+                      {m.gerekli - m.mevcut} adet eksik
+                    </span>
+                    <span className="flex-1 text-[13px] text-[#8B95A6]">
+                      {m.egitim} · {m.grup} · {m.hafta} kullanımı
+                    </span>
+                    <Chip>{talepler[m.id] ?? "Açık"}</Chip>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2.5">
           <Primary
-            disabled={acikEksik.length === 0}
-            onClick={() =>
-              hepsineUygula(
-                "Açık",
-                "Temin talebi oluşturuldu ve İl Sorumlusuna iletildi.",
-              )
-            }
+            disabled={selectedEksikler.length === 0}
+            onClick={seciliOlanlariTalepEt}
           >
             Temin talebi oluştur
           </Primary>
-          <Secondary
-            disabled={acikEksik.length === 0}
-            onClick={() =>
-              hepsineUygula(
-                "Transfer planlandı",
-                "Tüm açık eksikler için transfer planlandı.",
-              )
-            }
-          >
-            Transfer planla
-          </Secondary>
-          <Secondary
-            disabled={acikEksik.length === 0}
-            onClick={() =>
-              hepsineUygula(
-                "Teslim alındı",
-                "Eksik malzemeler teslim alındı olarak işaretlendi.",
-              )
-            }
-          >
-            Teslim alındı olarak işaretle
-          </Secondary>
         </div>
       </Card>
     </div>

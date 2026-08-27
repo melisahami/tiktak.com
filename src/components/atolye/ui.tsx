@@ -24,6 +24,8 @@ const CIP: Record<string, string> = {
   "Onaylandı": "bg-[#E9F5EF] text-[#106B4A] border-[#C7E4D6]",
   "Hazır": "bg-[#E9F5EF] text-[#106B4A] border-[#C7E4D6]",
   "Uygun": "bg-[#E9F5EF] text-[#106B4A] border-[#C7E4D6]",
+  "Tam": "bg-[#E9F5EF] text-[#106B4A] border-[#C7E4D6]",
+  "Fazla": "bg-[#E6EEFA] text-[#1F3D77] border-[#CFDDF3]",
   "Katıldı": "bg-[#E9F5EF] text-[#106B4A] border-[#C7E4D6]",
   "Teslim alındı": "bg-[#E9F5EF] text-[#106B4A] border-[#C7E4D6]",
   "Kapandı": "bg-[#E9F5EF] text-[#106B4A] border-[#C7E4D6]",
