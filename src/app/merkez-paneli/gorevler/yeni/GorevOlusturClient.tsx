@@ -12,7 +12,7 @@ import {
   Primary,
   Secondary,
 } from "@/components/panel/ui";
-import { EGITIMLER, ILLER } from "@/lib/demo/operasyon";
+import { ILLER } from "@/lib/demo/operasyon";
 import { DEMO_USERS } from "@/data/demo/users";
 
 const ATANABILIR_KULLANICILAR = DEMO_USERS.filter(
@@ -21,9 +21,8 @@ const ATANABILIR_KULLANICILAR = DEMO_USERS.filter(
 
 export default function GorevOlusturClient() {
   const [baslik, setBaslik] = useState(
-    "Robotik ve Kodlama Güz Dönemi eğitim öncesi hazırlık ve malzeme kontrolü",
+    "Saha operasyonu hazırlık ve kontrol görevi",
   );
-  const [egitim, setEgitim] = useState(EGITIMLER[0].ad);
   const [oncelik, setOncelik] = useState("Kritik");
   const [termin, setTermin] = useState("2026-09-20");
   const [secilenIller, setSecilenIller] = useState<string[]>(["İstanbul"]);
@@ -75,21 +74,7 @@ export default function GorevOlusturClient() {
             />
           </Field>
 
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Field label="İlgili eğitim" htmlFor="f-egitim">
-              <select
-                id="f-egitim"
-                value={egitim}
-                onChange={(e) => setEgitim(e.target.value)}
-                className={CONTROL}
-              >
-                {EGITIMLER.map((e) => (
-                  <option key={e.ad} value={e.ad}>
-                    {e.ad}
-                  </option>
-                ))}
-              </select>
-            </Field>
+          <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Öncelik" htmlFor="f-oncelik">
               <select
                 id="f-oncelik"
