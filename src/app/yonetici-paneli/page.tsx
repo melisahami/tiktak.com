@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AIInsightPanel } from "@/components/panel/AIInsightPanel";
+import { ExecutiveActionPanel } from "@/components/panel/ExecutiveActionPanel";
 import {
   Card,
   CardHead,
@@ -11,17 +12,11 @@ import {
   TD,
   TR,
 } from "@/components/panel/ui";
-import { EGITIMLER, ILLER, RAPOR_OZETI, RISKLER } from "@/lib/demo/operasyon";
+import { EGITIMLER, ILLER, RAPOR_OZETI } from "@/lib/demo/operasyon";
 
 export default function YoneticiOzet() {
   const e = EGITIMLER[0];
   const y = (n: number) => `${(n / e.atolye) * 100}%`;
-
-  const toneCls = {
-    err: "bg-[#FBEDEE] border-[#EFD3D6] text-[#97323B]",
-    warn: "bg-[#FDF4E3] border-[#EFDFBE] text-[#8A5F0F]",
-    info: "bg-[#F6F9FE] border-[#DDE5F0] text-[#3C4657]",
-  };
 
   return (
     <div>
@@ -87,16 +82,7 @@ export default function YoneticiOzet() {
           <h2 className="m-0 mb-3 text-base font-semibold text-[#14213D]">
             Aksiyon gerektiren alanlar
           </h2>
-          <div className="grid gap-2.5">
-            {RISKLER.map((r) => (
-              <div
-                key={r.metin}
-                className={`rounded-lg border px-3.5 py-3 ${toneCls[r.tone]}`}
-              >
-                <div className="text-sm">{r.metin}</div>
-              </div>
-            ))}
-          </div>
+          <ExecutiveActionPanel />
           <Link
             href="/yonetici-paneli/raporlar"
             className="mt-3.5 inline-block text-[13px] text-[#243B64] underline"
