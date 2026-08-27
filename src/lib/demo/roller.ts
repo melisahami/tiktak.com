@@ -1,25 +1,39 @@
 export type RolKey = "merkez" | "il" | "koordinator" | "yonetici";
 
 export type Rol = {
-  key: RolKey; ad: string; unvan: string; kapsam: string;
-  basHarf: string; base: string; nav: { href: string; label: string }[];
+  key: RolKey;
+  ad: string;
+  unvan: string;
+  kapsam: string;
+  basHarf: string;
+  base: string;
+  nav: { href: string; label: string }[];
 };
 
 export const ROLLER: Record<RolKey, Rol> = {
   merkez: {
-    key: "merkez", ad: "Selin Aksoy", unvan: "Merkez Operasyon", kapsam: "Genel Müdürlük",
-    basHarf: "SA", base: "/merkez-paneli",
+    key: "merkez",
+    ad: "Selin Aksoy",
+    unvan: "Merkez Operasyon",
+    kapsam: "Genel Müdürlük",
+    basHarf: "SA",
+    base: "/merkez-paneli",
     nav: [
       { href: "/merkez-paneli", label: "Genel bakış" },
       { href: "/merkez-paneli/gorevler", label: "Görevler" },
       { href: "/merkez-paneli/egitimler", label: "Eğitimler" },
+      { href: "/merkez-paneli/gorevler/yeni", label: "Görev oluştur" },
       { href: "/merkez-paneli/iller", label: "İller" },
       { href: "/merkez-paneli/bildirimler", label: "Bildirimler" },
     ],
   },
   il: {
-    key: "il", ad: "Hakan Demirtaş", unvan: "İl Sorumlusu", kapsam: "İstanbul",
-    basHarf: "HD", base: "/il-paneli",
+    key: "il",
+    ad: "Hakan Demirtaş",
+    unvan: "İl Sorumlusu",
+    kapsam: "İstanbul",
+    basHarf: "HD",
+    base: "/il-paneli",
     nav: [
       { href: "/il-paneli", label: "Genel bakış" },
       { href: "/il-paneli/gorevlerim", label: "Görevlerim" },
@@ -29,8 +43,12 @@ export const ROLLER: Record<RolKey, Rol> = {
     ],
   },
   koordinator: {
-    key: "koordinator", ad: "Emre Şahin", unvan: "Koordinatör", kapsam: "Marmara Bölgesi",
-    basHarf: "EŞ", base: "/koordinator-paneli",
+    key: "koordinator",
+    ad: "Emre Şahin",
+    unvan: "Koordinatör",
+    kapsam: "Marmara Bölgesi",
+    basHarf: "EŞ",
+    base: "/koordinator-paneli",
     nav: [
       { href: "/koordinator-paneli", label: "Operasyon takibi" },
       { href: "/koordinator-paneli/iller", label: "İller" },
@@ -39,8 +57,12 @@ export const ROLLER: Record<RolKey, Rol> = {
     ],
   },
   yonetici: {
-    key: "yonetici", ad: "Kerem Aydın", unvan: "Yetkili Yönetici", kapsam: "Türkiye",
-    basHarf: "KA", base: "/yonetici-paneli",
+    key: "yonetici",
+    ad: "Kerem Aydın",
+    unvan: "Yetkili Yönetici",
+    kapsam: "Türkiye",
+    basHarf: "KA",
+    base: "/yonetici-paneli",
     nav: [
       { href: "/yonetici-paneli", label: "Operasyon özeti" },
       { href: "/yonetici-paneli/iller", label: "İller" },
