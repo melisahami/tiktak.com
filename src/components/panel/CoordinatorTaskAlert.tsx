@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const COORDINATOR_ALERT_KEY = "tiktak.coordinator.material-task-alert";
+const COORDINATOR_ALERT_KEY = "tiktak.coordinator.material-task-alert.v2";
 
 type TaskAlert = {
   type: string;

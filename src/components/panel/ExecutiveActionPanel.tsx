@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ATOLYELER, ILLER, RISKLER } from "@/lib/demo/operasyon";
 
-const COORDINATOR_ALERT_KEY = "tiktak.coordinator.material-task-alert";
+const COORDINATOR_ALERT_KEY = "tiktak.coordinator.material-task-alert.v2";
 
 export function ExecutiveActionPanel() {
   const [message, setMessage] = useState<string | null>(null);
